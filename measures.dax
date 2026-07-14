@@ -1,0 +1,58 @@
+// ============================================================
+//  Sales & Revenue Executive Dashboard  —  DAX measures
+//  Create a measure table "_Measures" and paste these in.
+//  Model: fact_sales[*] related to dim_date, dim_product,
+//  dim_region, dim_salesrep (star schema). targets related to
+//  dim_date + dim_region.
+// ============================================================
+
+// ---------- Core ----------
+Total Revenue = SUM ( fact_sales[Revenue] )
+
+Total Cost = SUM ( fact_sales[Cost] )
+
+Total Profit = SUM ( fact_sales[Profit] )
+
+Gross Margin % = DIVIDE ( [Total Profit], [Total Revenue] )
+
+Total Orders = DISTINCTCOUNT ( fact_sales[OrderID] )
+
+Units Sold = SUM ( fact_sales[Quantity] )
+
+Avg Order Value = DIVIDE ( [Total Revenue], [Total Orders] )
+
+// ---------- Time intelligence ----------
+Revenue LY =
+CALCULATE ( [Total Revenue], SAMEPERIODLASTYEAR ( dim_date[Date] ) )
+
+Revenue YoY % =
+DIVIDE ( [Total Revenue] - [Revenue LY], [Revenue LY] )
+
+Revenue MTD = TOTALMTD ( [Total Revenue], dim_date[Date] )
+
+Revenue YTD = TOTALYTD ( [Total Revenue], dim_date[Date] )
+
+Revenue 3M Moving Avg =
+AVERAGEX (
+    DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -3, MONTH ),
+    [Total Revenue]
+)
+
+// ---------- Targets vs actuals ----------
+Total Target = SUM ( targets[Target] )
+
+Target Attainment % = DIVIDE ( [Total Revenue], [Total Target] )
+
+Revenue vs Target = [Total Revenue] - [Total Target]
+
+// ---------- Ranking / helpers ----------
+Top Product Rank =
+RANKX ( ALLSELECTED ( dim_product[Product] ), [Total Revenue], , DESC )
+
+Revenue % of Total =
+DIVIDE ( [Total Revenue], CALCULATE ( [Total Revenue], ALLSELECTED ( fact_sales ) ) )
+
+// ---------- KPI status (for conditional formatting) ----------
+Attainment Status =
+VAR a = [Target Attainment %]
+RETURN SWITCH ( TRUE (), a >= 1, "On/Above Target", a >= 0.9, "Near Target", "Below Target" )

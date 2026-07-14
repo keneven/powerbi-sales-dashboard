@@ -1,0 +1,17 @@
+ProductKey,Product,Category,ListPrice,StandardCost
+1000,Laptop,Electronics,723.69,411.42
+1001,Monitor,Electronics,789.71,504.06
+1002,Headphones,Electronics,193.46,138.02
+1003,Webcam,Electronics,713.69,472.63
+1004,Keyboard,Electronics,219.93,125.71
+1005,Desk,Home Office,235.74,165.07
+1006,Office Chair,Home Office,350.42,235.53
+1007,Lamp,Home Office,266.23,136.14
+1008,Filing Cabinet,Home Office,312.93,146.21
+1009,USB Hub,Accessories,51.38,31.88
+1010,Cable Pack,Accessories,47.9,26.14
+1011,Laptop Stand,Accessories,58.53,40.45
+1012,Mouse Pad,Accessories,48.92,24.58
+1013,Productivity Suite,Software,172.01,79.44
+1014,Security Suite,Software,97.03,61.56
+1015,Design Tool,Software,238.74,169.8
