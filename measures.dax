@@ -55,7 +55,18 @@ Top Product Rank =
 RANKX ( ALLSELECTED ( dim_product[Product] ), [Total Revenue], , DESC )
 
 Revenue % of Total =
-DIVIDE ( [Total Revenue], CALCULATE ( [Total Revenue], ALLSELECTED ( fact_sales ) ) )
+// Slicers filter the dimension tables, not the fact table, so ALLSELECTED on
+// fact_sales left the user's filters in place and the denominator was not the
+// total they expect. Clear the dimensions instead.
+DIVIDE (
+    [Total Revenue],
+    CALCULATE (
+        [Total Revenue],
+        ALLSELECTED ( dim_product ),
+        ALLSELECTED ( dim_region ),
+        ALLSELECTED ( dim_salesrep )
+    )
+)
 
 // ---------- KPI status (for conditional formatting) ----------
 Attainment Status =
