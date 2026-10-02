@@ -33,9 +33,14 @@ Revenue MTD = TOTALMTD ( [Total Revenue], dim_date[Date] )
 Revenue YTD = TOTALYTD ( [Total Revenue], dim_date[Date] )
 
 Revenue 3M Moving Avg =
-AVERAGEX (
-    DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -3, MONTH ),
-    [Total Revenue]
+// DATESINPERIOD returns individual dates, so AVERAGEX over it averages DAILY
+// revenue across ~90 days. Sum the window and divide by 3 to average months.
+DIVIDE (
+    CALCULATE (
+        [Total Revenue],
+        DATESINPERIOD ( dim_date[Date], MAX ( dim_date[Date] ), -3, MONTH )
+    ),
+    3
 )
 
 // ---------- Targets vs actuals ----------
